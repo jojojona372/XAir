@@ -3,7 +3,7 @@
 % Author: Jona van der Pal
 % Student number: s2523221
 % Original date: 22-02-2022
-% Current version: 07032022
+% Current version: 11032022
 % Description:
 % A function to calculate properties of air according to B.G. Kyle, Chemical and Process
 % Thermodynamics (Englewood Cliffs, NJ: Prentice-Hall, 1984)
@@ -28,7 +28,8 @@ function out = XAir(func,in1,in2)
     end
     
     % In case the user prefers single quotes.
-    func = string(func);
+    % Also converts input to lowercase.
+    func = lower(string(func));
     
     % If the functions have not been loaded already, they will have been
     % initialised as empty arrays. In this case, the functions should be
@@ -51,28 +52,28 @@ function out = XAir(func,in1,in2)
     try
         switch func
             %% Functions with output
-            case "h_T"
+            case "h_t"
                 out = h_T(in1);
-            case "T_h"
+            case "t_h"
                 out = T_h(in1);
-            case "T_ps"
+            case "t_ps"
                 out = T_ps(in1,in2);
             case "h_ps"
                 out = h_ps(in1,in2);
             case "p_hs"
                 out = p_hs(in1,in2);
-            case "p_Ts"
+            case "p_ts"
                 out = p_Ts(in1,in2);
-            case "s_Tp"
+            case "s_tp"
                 out = s_Tp(in1,in2);
             case "s_ph"
                 out = s_ph(in1,in2);
-                
+            
             %% Meta-functions
             % These are function related to the functionality of XAir.
             % These handle displaying relevant messages and loading or
             % generating necessary data.
-            case "load"
+            case {"load","l"}
                 % This doesn't actually load the data, but displays a
                 % status message to tell you wether it's necessary to try
                 % to  load the data at that line in your code.
@@ -94,14 +95,14 @@ function out = XAir(func,in1,in2)
                 end
                 XAir('unit')
             
-            case "reset"
+            case {"reset","r"}
                 disp("Repairing XAir.")
                 % Throw this error to redirect to the error handler
                 error('MATLAB:badsubscript','')
             
             % Deletes the file that stores the functions when you exit
             % MATLAB
-            case "delete"
+            case {"delete"}
                 warning("You are about to delete XAirData.mat!")
                 if upper(input(sprintf("Are you sure you want to do this? (Y/N)\n"), 's'))=="Y"
                     delete XAirData.mat
@@ -114,27 +115,28 @@ function out = XAir(func,in1,in2)
             
             % Clears the functions that loadXAirData stores in global
             % memory
-            case "clear"
+            case {"clear","c"}
                 clearvars -global h_T T_h T_ps h_ps p_hs p_Ts s_Tp s_ph
                 disp("Cleared XAir functions.")
-                
+            
             % Generates data with the desired unit.
-            case "gen"
+            case {"gen","g"}
                 % XAirDataGen is capable of handling the error if no unit
                 % is entered.
                 if ~exist('in1','var')
                     in1 = '';
                 end
                 XAirDataGen(in1)
+            
             % Displays the temperature unit with which XAir currently works.
-            case "unit"
+            case {"unit","u"}
                 load XAirData.mat unit
                 disp("In-/output temperature is in "+unit+".")
                 clear unit
             
-            % Opens XAir documentation
-            case "info"
-                doc XAir
+            % Displays XAir description in console
+            case {"info","i"}
+                help XAir
                 
             % Error handling if you misspelled a function or try to use a
             % function that doesn't exist.
