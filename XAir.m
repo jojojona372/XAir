@@ -3,7 +3,7 @@
 % Author: Jona van der Pal
 % Student number: s2523221
 % Original date: 22-02-2022
-% Current version: 11032022
+% Current version: 13032022
 % Description:
 % A function to calculate properties of air according to B.G. Kyle, Chemical and Process
 % Thermodynamics (Englewood Cliffs, NJ: Prentice-Hall, 1984)
@@ -45,6 +45,11 @@ function out = XAir(func,in1,in2)
         loadedData = 1;
     else
         loadedData = 0;
+    end
+    
+    if func=="s_pt"
+        [in1,in2]=swap(in1,in2);
+        func = "s_tp";
     end
     
     % Should be pretty self-explanatory.
@@ -177,6 +182,7 @@ function out = XAir(func,in1,in2)
     end
 end
 
+function [b, a] = swap(a, b) end
 
 %% License
 %{
